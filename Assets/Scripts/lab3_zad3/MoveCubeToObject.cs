@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class MoveCubeToObject : MonoBehaviour
 {
     public float speed = 5.0f;
     public GameObject target;
-    private Vector3 startPosition;
-    private Vector3 endPosition;
-    private bool movingForward = true;
+    private Vector3[] corners;
+    private int currentTarget = 0;
 
     void Start()
     {
-        startPosition = transform.position;
-        endPosition = target.transform.position;
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition = target.transform.position;
+        corners = new Vector3[4];
+        corners[0] = startPosition;
+        corners[1] = startPosition + new Vector3(startPosition.x, startPosition.y, startPosition.z + endPosition.z);
+        corners[2] = startPosition + new Vector3(startPosition.x + endPosition.x, startPosition.y, startPosition.z + endPosition.z);
+        corners[3] = startPosition + new Vector3(startPosition.x + endPosition.x, startPosition.y, startPosition.z);
     }
 
     // Update is called once per frame
@@ -21,23 +26,12 @@ public class MoveCubeToObject : MonoBehaviour
     {
         Vector3 currentPosition = transform.position;
 
-        if (Vector3.Distance(currentPosition, endPosition) <= .5f)
+        if (Vector3.Distance(currentPosition, corners[currentTarget]) <= 0.5f)
         {
-            movingForward = false;
+            currentTarget = (currentTarget + 1) % 4;
+            transform.LookAt(corners[currentTarget]);
         }
 
-        if (Vector3.Distance(currentPosition, startPosition) <= .5f)
-        {
-            movingForward = true;
-        }
-
-        if (movingForward)
-        {
-            transform.position = Vector3.MoveTowards(currentPosition, endPosition, speed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(currentPosition, startPosition, speed * Time.deltaTime);
-        }
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 }

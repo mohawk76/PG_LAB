@@ -5,38 +5,30 @@ using UnityEngine;
 public class MoveCube : MonoBehaviour
 {
     public float speed = 5.0f;
-    private float startPositionX;
-    private float endPositionX;
-    private bool movingForward = true;
+    private Vector3 startPosition;
+    private Vector3 endPosition;
     private float moveDistance = 10.0f;
 
     void Start()
     {
-        startPositionX = transform.position.x;
-        endPositionX = startPositionX + moveDistance;
+        startPosition = transform.position;
+        endPosition = new Vector3(startPosition.x + moveDistance, startPosition.y, startPosition.z);
     }
 
     // Update is called once per frame
     void Update()
     {
-        float currentPositionX = transform.position.x;
-        if (currentPositionX >= endPositionX)
+        Vector3 currentPosition = transform.position;
+
+        if (Vector3.Distance(currentPosition, endPosition) <= .1f)
         {
-            movingForward = false;
+            transform.LookAt(startPosition);
         }
-        else if (currentPositionX <= startPositionX)
+        else if (Vector3.Distance(currentPosition, startPosition) <= .1f)
         {
-            movingForward = true;
+            transform.LookAt(endPosition);
         }
 
-        if (movingForward)
-        {
-            transform.Translate(Vector3.right * speed * Time.deltaTime);
-        }
-        else
-        {
-            transform.Translate(Vector3.left * speed * Time.deltaTime);
-
-        }
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 }
