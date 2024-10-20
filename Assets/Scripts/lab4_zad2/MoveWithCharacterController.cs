@@ -34,7 +34,7 @@ public class MoveWithCharacterController : MonoBehaviour
         }
 
         // zmienia wysokoœæ postaci.
-        if (Input.GetButtonDown("Jump") && groundedPlayer)
+        if (Input.GetButton("Jump") && groundedPlayer)
         {
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
         }
