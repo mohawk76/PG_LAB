@@ -7,8 +7,8 @@ public class MoveAndRotateWithCharacterController : MonoBehaviour
     public GameObject camera;
     private CharacterController controller;
     private Vector3 playerVelocity;
-    private float playerSpeed = 10.0f;
-    private float jumpHeight = 1.0f;
+    public float playerSpeed = 10.0f;
+    public float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
     public float sensitivity = 200f;
     private float cameraRot;
@@ -47,5 +47,9 @@ public class MoveAndRotateWithCharacterController : MonoBehaviour
 
         transform.Rotate(Vector3.up * mouseXMove);
         camera.transform.eulerAngles = new Vector3(cameraRot, transform.eulerAngles.y, 0f);
+    }
+    public void Jump(float multilier = 1f)
+    {
+        playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue) * multilier;
     }
 }
